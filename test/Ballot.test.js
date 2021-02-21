@@ -12,26 +12,26 @@ contract("Ballot - basic initialization", function (accounts) {
 
   it("add everyone to ballot as voter ", async () => {
     const ballot = await Ballot.deployed();
-  });
 
-  it("shoud give everyone right to vote ", async () => {
     await ballot.giveRightToVote(alice, { from: chairperson });
     await ballot.giveRightToVote(bob, { from: chairperson });
     await ballot.giveRightToVote(john, { from: chairperson });
     await ballot.giveRightToVote(aslan, { from: chairperson });
     await ballot.giveRightToVote(doe, { from: chairperson });
-  });
 
-  it("should test votes", async () => {
+    await ballot.addProposal("A", { from: chairperson });
+    await ballot.addProposal("B", { from: chairperson });
+    await ballot.addProposal("C", { from: chairperson });
+    await ballot.addProposal("D", { from: chairperson });
+    await ballot.addProposal("E", { from: chairperson });
+
     await ballot.vote(0, { from: alice });
     await ballot.vote(1, { from: bob });
     await ballot.vote(2, { from: john });
     await ballot.vote(3, { from: aslan });
     await ballot.vote(0, { from: doe });
     await ballot.vote(0, { from: chairperson });
-  });
 
-  it("should call winning propoal", async () => {
     const winningPropCP = await ballot.winnerName({ from: chairperson });
     const winningPropAlice = await ballot.winnerName({ from: alice });
     assert.equal(winningPropCP, "A");

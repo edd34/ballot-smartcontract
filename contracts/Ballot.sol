@@ -15,7 +15,7 @@ contract Ballot {
 
     // This is a type for a single proposal.
     struct Proposal {
-        bytes32 name; // short name (up to 32 bytes)
+        string name; // short name (up to 32 bytes)
         uint256 voteCount; // number of accumulated votes
     }
 
@@ -29,19 +29,14 @@ contract Ballot {
     Proposal[] public proposals;
 
     /// Create a new ballot to choose one of `proposalNames`.
-    constructor(bytes32[] memory proposalNames) {
+    constructor() {
         chairperson = msg.sender;
         voters[chairperson].weight = 1;
+    }
 
-        // For each of the provided proposal names,
-        // create a new proposal object and add it
-        // to the end of the array.
-        for (uint256 i = 0; i < proposalNames.length; i++) {
-            // `Proposal({...})` creates a temporary
-            // Proposal object and `proposals.push(...)`
-            // appends it to the end of `proposals`.
-            proposals.push(Proposal({name: proposalNames[i], voteCount: 0}));
-        }
+    function addProposal(string memory nameProposal) public {
+        require(msg.sender == chairperson);
+        proposals.push(Proposal({name: nameProposal, voteCount: 0}));
     }
 
     // Give `voter` the right to vote on this ballot.
@@ -135,7 +130,7 @@ contract Ballot {
     // Calls winningProposal() function to get the index
     // of the winner contained in the proposals array and then
     // returns the name of the winner
-    function winnerName() public view returns (bytes32 winnerName_) {
+    function winnerName() public view returns (string memory winnerName_) {
         winnerName_ = proposals[winningProposal()].name;
     }
 }
