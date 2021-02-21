@@ -1,7 +1,5 @@
-const ether = 10**18; // 1 ether = 1000000000000000000 wei
-const wei = 1;
-var SimpleBank = artifacts.require("SimpleBank");
+var Ballot = artifacts.require("Ballot");
 
 module.exports = function(deployer) {
-  deployer.deploy(SimpleBank);
+  deployer.deploy(Ballot, ['A', 'B', 'C', 'D']);
 };
